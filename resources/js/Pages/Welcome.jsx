@@ -8,10 +8,10 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                 <div className="sm:fixed sm:top-0 sm:right-0 p-6 text-right">
                     {auth.user ? (
                         <Link
-                            href={route('dashboard')}
+                            href={route('chat.index')}
                             className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline-0"
                         >
-                            Dashboard
+                            Chats
                         </Link>
                     ) : (
                         <>
