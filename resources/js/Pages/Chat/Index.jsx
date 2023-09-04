@@ -1,114 +1,216 @@
 import React from 'react';
-import { Head, Link } from "@inertiajs/react";
+import { Head } from "@inertiajs/react";
 import App from "@/Layouts/App.jsx";
+import MineProfileChat from "@/Components/MineProfileChat.jsx";
+import SearchChatBar from "@/Components/SearchChatBar.jsx";
+import ChatListUser from "@/Components/ChatListUser.jsx";
+import HeaderUserChatBox from "@/Components/HeaderUserChatBox.jsx";
+import ChatInputMessage from '@/Components/ChatInputMessage';
 
 export default function Index({auth}) {
+
     return (
         <>
             <Head title="Chats" />
 
-            <div className="relative min-h-screen bg-dots-lighter bg-gray-900 selection:bg-red-500 selection:text-white">
-                <div className="max-w-screen-2xl mx-auto px-6 lg:px-0">
-                    <div className="py-6 h-screen">
-                        <div className="flex border border-gray-700 rounded-lg shadow h-full overflow-hidden">
-                            <div className="w-1/3 flex flex-col border-gray-700 border-r px-5 py-2 pb-5">
+            <div className="relative min-h-screen bg-gray-900 bg-dots-lighter selection:bg-red-500 selection:text-white">
+                <div className="px-6 mx-auto max-w-screen-2xl xl:px-0">
+                    <div className="h-screen py-6">
+                        <div className="flex h-full overflow-hidden border border-gray-700 rounded-lg shadow">
+                            <div className="flex flex-col w-full px-5 py-2 pb-5 lg:w-1/3 lg:border-r lg:border-gray-700">
 
                                 {/* You */}
-                                <div className="py-2 pt-5 px-3 flex flex-row justify-between items-center">
-                                    <div className="flex w-full items-center pb-3">
-                                        <div className="flex min-w-0 items-center justify-between space-x-3.5">
-                                            <div className="inline-block relative">
-                                                <span className="inline-flex items-center justify-center h-10 w-10 rounded-full bg-gray-700">
-                                                    <span className="font-medium leading-none text-white">
-                                                        {auth.user.name.charAt(0).toUpperCase()}
-                                                    </span>
-                                                </span>
-                                                <span className="absolute bottom-0 right-0.5 block h-2 w-2 rounded-full ring-2 ring-gray-200 bg-green-500"/>
-                                            </div>
-                                            <div className="flex-1 flex flex-col min-w-0">
-                                                <span className="text-gray-100 text-sm font-medium truncate">
-                                                    {auth.user.name}
-                                                </span>
-                                                <span className="text-gray-400 text-xs truncate">
-                                                    @{auth.user.username}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <MineProfileChat auth={auth} />
 
                                 {/* Search */}
-                                <div className="px-2.5">
-                                    <label htmlFor="search" className="sr-only">
-                                        Search or start a new chat
-                                    </label>
-                                    <div className="mt-1 relative rounded-md shadow-sm">
-                                        <div
-                                            className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
-                                            aria-hidden="true">
-                                            <svg className="mr-3 h-3 w-3 text-gray-300" xmlns="http://www.w3.org/2000/svg"
-                                                 viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                                <path fillRule="evenodd"
-                                                      d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                                                      clipRule="evenodd"/>
-                                            </svg>
-                                        </div>
-                                        <input
-                                            type="text"
-                                            name="search"
-                                            id="search"
-                                            autoComplete="off"
-                                            className="focus:ring-gray-700 focus:border-gray-700 block w-full pl-9 text-xs border-gray-700 rounded-md text-gray-300 bg-transparent"
-                                            placeholder="Search or start a new chat"
-                                        />
-                                    </div>
-                                </div>
+                                <SearchChatBar />
 
                                 {/* List User */}
-                                <div className="flex-1 overflow-auto mt-3">
+                                <div className="flex-1 mt-3 overflow-auto">
                                     {
                                         [...Array(50)].map((_, i) => (
                                             <div className="py-0" key={i}>
-                                                <Link href={'#'}
-                                                      className="flex w-full items-center hover:bg-gray-800/60 px-2.5 py-3 rounded-md">
-                                                    <div className="flex-2 items-center mr-3">
-                                                        <div className="inline-block relative">
-                                                            <span className="inline-flex items-center justify-center h-10 w-10 rounded-full bg-gray-700">
-                                                                <span
-                                                                    className="font-medium leading-none text-white">
-                                                                    {auth.user.name.charAt(0).toUpperCase()}
-                                                                </span>
-                                                            </span>
-                                                            <span className="absolute bottom-0 right-0.5 block h-2 w-2 rounded-full ring-2 ring-gray-200 bg-green-500"/>
-                                                        </div>
-                                                    </div>
-                                                    <div className="flex-1 flex flex-col min-w-0 pr-2">
-                                                        <div className="flex items-center justify-between">
-                                                            <span className="text-gray-100 text-sm font-medium truncate mb-1.5">
-                                                                {auth.user.name}
-                                                            </span>
-                                                            <span className="text-[10px] text-gray-400 mb-1">
-                                                                11:12
-                                                            </span>
-                                                        </div>
-                                                        <div className="flex items-center justify-between">
-                                                            <span className="text-gray-400 text-xs truncate">
-                                                                Chat to another user will appear here
-                                                            </span>
-                                                            <span className="inline-flex items-center px-1.5 rounded-full text-[10px] bg-purple-500 text-white">
-                                                                1
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </Link>
+                                                <ChatListUser auth={auth} />
                                             </div>
                                         ))
                                     }
                                 </div>
                             </div>
 
-                            <div className="w-2/3 flex flex-col">
-                                {/*    */}
+                            <div className="flex-col hidden lg:flex lg:w-2/3">
+                                {/* Header Chat User */}
+                                <div className="px-6 py-5 border-b border-gray-700">
+                                    <div className="flex items-center justify-between">
+                                        <HeaderUserChatBox />
+                                        <div className="pr-5">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5 text-white">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/>
+                                            </svg>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="flex-1 h-screen px-8 pb-5 mt-3 overflow-y-scroll">
+
+                                    {/* Date Indicator */}
+                                    <div className="flex items-center justify-center my-5">
+                                        <div className="w-full h-0.5 bg-gray-800/70"></div>
+                                        <div className="px-4 py-0.5 text-[10.2px] text-gray-400 border border-gray-700 rounded bg-gray-800/40 tracking-wide leading-relaxed">
+                                            Yesterday
+                                        </div>
+                                        <div className="w-full h-0.5 bg-gray-800/70"></div>
+                                    </div>
+
+                                    {/* Chat Box Message */}
+                                    {/* Left Side */}
+                                    <div className="flex items-start justify-start mb-1.5 relative w-2/3">
+                                        <div className="py-2 pl-3 pr-12 text-sm text-gray-300 bg-gray-800 rounded-md">
+                                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.
+                                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.
+                                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.
+                                            <div className="flex items-center justify-end -mt-2.5 -mr-9">
+                                                <div className="text-[10px] text-gray-400/70">
+                                                    12:30
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="absolute top-0 w-4 h-4 bg-gray-800 rounded-bl-full -left-2"></div>
+                                    </div>
+
+                                    <div className="flex items-start justify-start mb-1.5 w-2/3">
+                                        <div className="py-2 pl-3 pr-12 text-sm text-gray-300 bg-gray-800 rounded-md">
+                                            Lorem ipsum dolor sit Lorem ipsum dolor sit voluptatum.
+                                            <div className="flex items-center justify-end -mt-2.5 -mr-9">
+                                                <div className="text-[10px] text-gray-400/70">
+                                                    12:30
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-start justify-start mb-1.5 w-2/3">
+                                        <div className="py-2 pl-3 pr-12 text-sm text-gray-300 bg-gray-800 rounded-md">
+                                            Lorem.
+                                            <div className="flex items-center justify-end -mt-2.5 -mr-9">
+                                                <div className="text-[10px] text-gray-400/70">
+                                                    12:30
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="py-0.5"></div>
+                                    
+                                    {/* Rigth Side */}
+
+                                    <div className="flex items-end justify-end mb-1.5 relative">
+                                        <div className="py-2 pl-3 pr-20 text-sm text-gray-300 bg-gray-800 rounded-md">
+                                            Lorem.
+                                            <div className="flex items-center justify-end -mt-2.5 -mr-16">
+                                                <div className="text-[10px] text-gray-400/70">
+                                                    12:30
+                                                </div>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24" id="double-check" className="w-4 h-4 ml-1 -mr-2 text-cyan-500">
+                                                    <path fillRule="evenodd" d="M16.5303 6.46967C16.8232 6.76256 16.8232 7.23744 16.5303 7.53033L6.53033 17.5303C6.38968 17.671 6.19891 17.75 6 17.75 5.80109 17.75 5.61032 17.671 5.46967 17.5303L1.46967 13.5303C1.17678 13.2374 1.17678 12.7626 1.46967 12.4697 1.76256 12.1768 2.23744 12.1768 2.53033 12.4697L6 15.9393 15.4697 6.46967C15.7626 6.17678 16.2374 6.17678 16.5303 6.46967zM22.5303 6.46966C22.8232 6.76254 22.8232 7.23742 22.5303 7.53032L12.5308 17.5303C12.2379 17.8232 11.7631 17.8232 11.4702 17.5304L9.96975 16.0304C9.67681 15.7376 9.67674 15.2627 9.96959 14.9697 10.2624 14.6768 10.7373 14.6767 11.0303 14.9696L12.0004 15.9394 21.4697 6.46968C21.7625 6.17678 22.2374 6.17677 22.5303 6.46966z" clipRule="evenodd"></path>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <div className="absolute top-0 w-4 h-4 bg-gray-800 rounded-br-full -right-2"></div>
+                                    </div>
+
+                                    <div className="flex items-end justify-end mb-1.5">
+                                        <div className="py-2 pl-3 pr-20 text-sm text-gray-300 bg-gray-800 rounded-md">
+                                            Lorem ipsum dolor sit.
+                                            <div className="flex items-center justify-end -mt-2.5 -mr-16">
+                                                <div className="text-[10px] text-gray-400/70">
+                                                    12:30
+                                                </div>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24" id="double-check" className="w-4 h-4 ml-1 -mr-2 text-cyan-500">
+                                                    <path fillRule="evenodd" d="M16.5303 6.46967C16.8232 6.76256 16.8232 7.23744 16.5303 7.53033L6.53033 17.5303C6.38968 17.671 6.19891 17.75 6 17.75 5.80109 17.75 5.61032 17.671 5.46967 17.5303L1.46967 13.5303C1.17678 13.2374 1.17678 12.7626 1.46967 12.4697 1.76256 12.1768 2.23744 12.1768 2.53033 12.4697L6 15.9393 15.4697 6.46967C15.7626 6.17678 16.2374 6.17678 16.5303 6.46967zM22.5303 6.46966C22.8232 6.76254 22.8232 7.23742 22.5303 7.53032L12.5308 17.5303C12.2379 17.8232 11.7631 17.8232 11.4702 17.5304L9.96975 16.0304C9.67681 15.7376 9.67674 15.2627 9.96959 14.9697 10.2624 14.6768 10.7373 14.6767 11.0303 14.9696L12.0004 15.9394 21.4697 6.46968C21.7625 6.17678 22.2374 6.17677 22.5303 6.46966z" clipRule="evenodd"></path>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-end justify-end mb-1.5">
+                                        <div className="py-2 pl-3 pr-20 text-sm text-gray-300 bg-gray-800 rounded-md">
+                                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.
+                                            <div className="flex items-center justify-end -mt-2.5 -mr-16">
+                                                <div className="text-[10px] text-gray-400/70">
+                                                    12:30
+                                                </div>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24" id="double-check" className="w-4 h-4 ml-1 -mr-2 text-cyan-500">
+                                                    <path fillRule="evenodd" d="M16.5303 6.46967C16.8232 6.76256 16.8232 7.23744 16.5303 7.53033L6.53033 17.5303C6.38968 17.671 6.19891 17.75 6 17.75 5.80109 17.75 5.61032 17.671 5.46967 17.5303L1.46967 13.5303C1.17678 13.2374 1.17678 12.7626 1.46967 12.4697 1.76256 12.1768 2.23744 12.1768 2.53033 12.4697L6 15.9393 15.4697 6.46967C15.7626 6.17678 16.2374 6.17678 16.5303 6.46967zM22.5303 6.46966C22.8232 6.76254 22.8232 7.23742 22.5303 7.53032L12.5308 17.5303C12.2379 17.8232 11.7631 17.8232 11.4702 17.5304L9.96975 16.0304C9.67681 15.7376 9.67674 15.2627 9.96959 14.9697 10.2624 14.6768 10.7373 14.6767 11.0303 14.9696L12.0004 15.9394 21.4697 6.46968C21.7625 6.17678 22.2374 6.17677 22.5303 6.46966z" clipRule="evenodd"></path>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Date Indicator */}
+                                    <div className="flex items-center justify-center my-5">
+                                        <div className="w-full h-0.5 bg-gray-800/70"></div>
+                                        <div className="px-4 py-0.5 text-[10.2px] text-gray-400 border border-gray-700 rounded bg-gray-800/40 tracking-wide leading-relaxed">
+                                            Today
+                                        </div>
+                                        <div className="w-full h-0.5 bg-gray-800/70"></div>
+                                    </div>
+
+                                    {/* Left Side */}
+                                    <div className="flex items-start justify-start mb-1.5 relative w-2/3">
+                                        <div className="py-2 pl-3 pr-12 text-sm text-gray-300 bg-gray-800 rounded-md">
+                                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.
+                                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.
+                                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.
+                                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.
+                                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.
+                                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.
+                                            <div className="flex items-center justify-end -mt-2.5 -mr-9">
+                                                <div className="text-[10px] text-gray-400/70">
+                                                    12:30
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="absolute top-0 w-4 h-4 bg-gray-800 rounded-bl-full -left-2"></div>
+                                    </div>
+
+                                    <div className="flex items-start justify-start mb-1.5 w-2/3">
+                                        <div className="py-2 pl-3 pr-12 text-sm text-gray-300 bg-gray-800 rounded-md">
+                                            Lorem ipsum dolor sit amet.
+                                            <div className="flex items-center justify-end -mt-2.5 -mr-9">
+                                                <div className="text-[10px] text-gray-400/70">
+                                                    12:30
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Rigth Side */}
+                                    <div className="flex items-end justify-end mb-1.5 relative w-2/3">
+                                        <div className="py-2 pl-3 pr-20 text-sm text-gray-300 bg-gray-800 rounded-md">
+                                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.
+                                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.
+                                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.
+                                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.
+                                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.
+                                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.
+                                            <div className="flex items-center justify-end -mt-2.5 -mr-16">
+                                                <div className="text-[10px] text-gray-400/70">
+                                                    12:30
+                                                </div>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24" id="double-check" className="w-4 h-4 ml-1 -mr-2 text-gray-400/70">
+                                                    <path fillRule="evenodd" d="M16.5303 6.46967C16.8232 6.76256 16.8232 7.23744 16.5303 7.53033L6.53033 17.5303C6.38968 17.671 6.19891 17.75 6 17.75 5.80109 17.75 5.61032 17.671 5.46967 17.5303L1.46967 13.5303C1.17678 13.2374 1.17678 12.7626 1.46967 12.4697 1.76256 12.1768 2.23744 12.1768 2.53033 12.4697L6 15.9393 15.4697 6.46967C15.7626 6.17678 16.2374 6.17678 16.5303 6.46967zM22.5303 6.46966C22.8232 6.76254 22.8232 7.23742 22.5303 7.53032L12.5308 17.5303C12.2379 17.8232 11.7631 17.8232 11.4702 17.5304L9.96975 16.0304C9.67681 15.7376 9.67674 15.2627 9.96959 14.9697 10.2624 14.6768 10.7373 14.6767 11.0303 14.9696L12.0004 15.9394 21.4697 6.46968C21.7625 6.17678 22.2374 6.17677 22.5303 6.46966z" clipRule="evenodd"></path>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <div className="absolute top-0 w-4 h-4 bg-gray-800 rounded-br-full -right-2"></div>
+                                    </div>
+
+                                </div>
+                                
+                                <div className="flex px-6 py-1.5 border-t border-gray-700">
+                                    <ChatInputMessage />
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -125,100 +227,6 @@ export default function Index({auth}) {
                     }
                 }
             `}</style>
-
-            {/*<div className="grid grid-cols-1 lg:grid-cols-12 divide-x divide-gray-300">*/}
-            {/*    <div className="bg-white/80 p-5 lg:col-span-4">*/}
-            {/*        /!* You *!/*/}
-            {/*        <div className="flex w-full items-center pb-5 px-2.5">*/}
-            {/*            <div className="flex min-w-0 items-center justify-between space-x-3.5">*/}
-            {/*                <div className="inline-block relative">*/}
-            {/*                        <span className="inline-flex items-center justify-center h-10 w-10 rounded-full bg-gray-500">*/}
-            {/*                            <span className="font-medium leading-none text-white">*/}
-            {/*                                {auth.user.name.charAt(0).toUpperCase()}*/}
-            {/*                            </span>*/}
-            {/*                        </span>*/}
-            {/*                    <span className="absolute bottom-0 right-0 block h-2.5 w-2.5 rounded-full ring-2 ring-white bg-green-400" />*/}
-            {/*                </div>*/}
-            {/*                <div className="flex-1 flex flex-col min-w-0">*/}
-            {/*                        <span className="text-gray-900 text-sm font-medium truncate">*/}
-            {/*                            {auth.user.name}*/}
-            {/*                        </span>*/}
-            {/*                    <span className="text-gray-500 text-xs truncate">*/}
-            {/*                            @{auth.user.username}*/}
-            {/*                        </span>*/}
-            {/*                </div>*/}
-            {/*            </div>*/}
-            {/*        </div>*/}
-
-            {/*        /!* Search or Start a new Chat *!/*/}
-            {/*        <div className="px-2.5">*/}
-            {/*            <label htmlFor="search" className="sr-only">*/}
-            {/*                Search or start a new chat*/}
-            {/*            </label>*/}
-            {/*            <div className="mt-1 relative rounded-md shadow-sm">*/}
-            {/*                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none" aria-hidden="true">*/}
-            {/*                    <svg className="mr-3 h-3 w-3 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">*/}
-            {/*                        <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd"/>*/}
-            {/*                    </svg>*/}
-            {/*                </div>*/}
-            {/*                <input*/}
-            {/*                    type="text"*/}
-            {/*                    name="search"*/}
-            {/*                    id="search"*/}
-            {/*                    autoComplete="off"*/}
-            {/*                    className="focus:ring-gray-300 focus:border-gray-300 block w-full pl-9 text-xs border-gray-300 rounded-md text-gray-600"*/}
-            {/*                    placeholder="Search or start a new chat"*/}
-            {/*                />*/}
-            {/*            </div>*/}
-            {/*        </div>*/}
-
-            {/*        <div className="flex-1 mt-2 max-h-screen overflow-y-auto">*/}
-            {/*            <div className="pt-2">*/}
-            {/*                {*/}
-            {/*                    [...Array(15)].map((_, i) => (*/}
-            {/*                        <div className="py-0" key={i}>*/}
-            {/*                            <Link href={'#'} className="flex w-full items-center hover:bg-gray-100 px-2.5 py-3 rounded-md">*/}
-            {/*                                <div className="flex-2 items-center mr-3">*/}
-            {/*                                    <div className="inline-block relative">*/}
-            {/*                                                    <span className="inline-flex items-center justify-center h-10 w-10 rounded-full bg-gray-500">*/}
-            {/*                                                        <span className="font-medium leading-none text-white">*/}
-            {/*                                                            {auth.user.name.charAt(0).toUpperCase()}*/}
-            {/*                                                        </span>*/}
-            {/*                                                    </span>*/}
-            {/*                                        <span className="absolute bottom-0 right-0 block h-2.5 w-2.5 rounded-full ring-2 ring-white bg-green-400" />*/}
-            {/*                                    </div>*/}
-            {/*                                </div>*/}
-            {/*                                <div className="flex-1 flex flex-col min-w-0 pr-2">*/}
-            {/*                                    <div className="flex items-center justify-between">*/}
-            {/*                                                    <span className="text-gray-900 text-sm font-medium truncate mb-0.5">*/}
-            {/*                                                        {auth.user.name}*/}
-            {/*                                                    </span>*/}
-            {/*                                        <span className="text-[10px] text-gray-400">*/}
-            {/*                                                        11:12*/}
-            {/*                                                    </span>*/}
-            {/*                                    </div>*/}
-            {/*                                    <div className="flex items-center justify-between">*/}
-            {/*                                                    <span className="text-gray-400 text-xs truncate">*/}
-            {/*                                                        Chat to another user will appear here*/}
-            {/*                                                    </span>*/}
-            {/*                                        <span className="inline-flex items-center px-1 py-[0.090rem] rounded-full text-[9px] bg-blue-400 text-white">*/}
-            {/*                                                        999*/}
-            {/*                                                    </span>*/}
-            {/*                                    </div>*/}
-            {/*                                </div>*/}
-            {/*                            </Link>*/}
-            {/*                        </div>*/}
-            {/*                    ))*/}
-            {/*                }*/}
-            {/*            </div>*/}
-            {/*        </div>*/}
-            {/*    </div>*/}
-
-
-            {/*    <div className="hidden lg:block p-6 lg:col-span-8 h-screen">*/}
-            {/*        Hello*/}
-            {/*    </div>*/}
-            {/*</div>*/}
         </>
     )
 }
