@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function RigthSideBoxChat() {
+export default function RightSideBoxChat() {
     return (
         <>
             {/* Right Side Box Chat */}
