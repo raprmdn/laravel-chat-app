@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserCollection;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -15,12 +16,20 @@ class ChatController extends Controller
             ->get();
 
         return inertia('Chat/Index', [
-            'users' => UserResource::collection($users),
+            'users' => UserCollection::make($users),
         ]);
     }
 
     public function show(User $user)
     {
-        dd($user);
+        $users = User::query()
+            ->where('id', '!=', auth()->id())
+            ->get();
+        UserResource::withoutWrapping();
+
+        return inertia('Chat/Show', [
+            'users' =>  UserCollection::make($users),
+            'user' => UserResource::make($user),
+        ]);
     }
 }
