@@ -2,17 +2,17 @@ import React from 'react';
 import { Link } from "@inertiajs/react";
 import ProfilePictureOnChat from "@/Components/ProfilePictureOnChat.jsx";
 
-export default function ChatListUser({ auth }) {
+export default function ChatListUser({ user }) {
     return (
         <>
-            <Link href={'#'} className="flex w-full items-center hover:bg-gray-800/60 px-2.5 py-3 rounded-md">
+            <Link href={route('chat.show', user.uuid)} className="flex w-full items-center hover:bg-gray-800/60 px-2.5 py-3 rounded-md">
                 <div className="flex-2 items-center mr-3">
-                    <ProfilePictureOnChat auth={auth} />
+                    <ProfilePictureOnChat user={user} />
                 </div>
                 <div className="flex-1 flex flex-col min-w-0 pr-2">
                     <div className="flex items-center justify-between">
                         <div className="text-gray-100 text-sm font-medium truncate mb-1.5">
-                            {auth.user.name}
+                            {user.name}
                         </div>
                         <div className="text-[10px] text-gray-400 mb-1">
                             11:12

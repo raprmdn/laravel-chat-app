@@ -1,5 +1,5 @@
 import React from 'react';
-import { Head } from "@inertiajs/react";
+import { Head, usePage } from "@inertiajs/react";
 import App from "@/Layouts/App.jsx";
 import MineProfileChat from "@/Components/MineProfileChat.jsx";
 import SearchChatBar from "@/Components/SearchChatBar.jsx";
@@ -7,7 +7,9 @@ import ChatListUser from "@/Components/ChatListUser.jsx";
 import HeaderUserChatBox from "@/Components/HeaderUserChatBox.jsx";
 import ChatInputMessage from '@/Components/ChatInputMessage';
 
-export default function Index({auth}) {
+export default function Index() {
+    const { auth } = usePage().props;
+    const { data: users } = usePage().props.users;
 
     return (
         <>
@@ -28,9 +30,9 @@ export default function Index({auth}) {
                                 {/* List User */}
                                 <div className="flex-1 mt-3 overflow-auto">
                                     {
-                                        [...Array(50)].map((_, i) => (
+                                        users.map((user, i) => (
                                             <div className="py-0" key={i}>
-                                                <ChatListUser auth={auth} />
+                                                <ChatListUser user={user} />
                                             </div>
                                         ))
                                     }
@@ -93,7 +95,7 @@ export default function Index({auth}) {
                                                                 Rafi Putra Ramadhan
                                                             </div>
                                                             <div className="overflow-hidden text-gray-300/80" style={{ display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
-                                                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum. 
+                                                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.
                                                                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.
                                                                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.
                                                             </div>
@@ -132,7 +134,7 @@ export default function Index({auth}) {
                                                                 Rafi Putra Ramadhan
                                                             </div>
                                                             <div className="overflow-hidden text-gray-300/80" style={{ display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
-                                                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum. 
+                                                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.
                                                                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.
                                                                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.
                                                             </div>
@@ -153,7 +155,7 @@ export default function Index({auth}) {
                                                 <div className="absolute top-0 w-4 h-4 bg-gray-800 rounded-br-full -right-2"></div>
                                             </div>
                                         </div>
-                                        
+
                                         <div className="col-start-6 col-end-13 p-1">
                                             <div className="flex flex-row-reverse">
                                                 <div className="py-2 pl-3 pr-20 text-sm text-gray-300 bg-gray-800 rounded-md">
@@ -208,7 +210,7 @@ export default function Index({auth}) {
                                                                     Rafi Putra Ramadhan
                                                                 </div>
                                                                 <div className="overflow-hidden text-gray-300/80" style={{ display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
-                                                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum. 
+                                                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.
                                                                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.
                                                                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.
                                                                 </div>
@@ -278,7 +280,7 @@ export default function Index({auth}) {
 
                                     </div>
                                 </div>
-                                
+
                                 <div className="flex px-6 py-1.5 border-t border-gray-700">
                                     <ChatInputMessage />
                                 </div>

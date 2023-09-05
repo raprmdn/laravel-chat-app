@@ -22,7 +22,8 @@ class User extends Authenticatable
         'username',
         'email',
         'password',
-        'uuid'
+        'uuid',
+        'last_seen_at',
     ];
 
     /**
@@ -43,5 +44,11 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'last_seen_at' => 'datetime',
     ];
+
+    public function chats(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Chat::class);
+    }
 }
