@@ -5,7 +5,7 @@ import ProfilePictureOnChat from "@/Components/ProfilePictureOnChat.jsx";
 export default function ChatListUser({ user }) {
     return (
         <>
-            <Link href={route('chat.show', user.uuid)} className="flex w-full items-center hover:bg-gray-800/60 px-2.5 py-3 rounded-md">
+            <Link preserveScroll preserveState href={route('chat.show', user.uuid)} className="flex w-full items-center hover:bg-gray-800/60 px-2.5 py-3 rounded-md">
                 <div className="flex-2 items-center mr-3">
                     <ProfilePictureOnChat user={user} />
                 </div>

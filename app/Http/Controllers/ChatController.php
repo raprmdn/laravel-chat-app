@@ -22,6 +22,10 @@ class ChatController extends Controller
 
     public function show(User $user)
     {
+        if ($user->id === auth()->id()) {
+            return redirect()->route('chat.index');
+        }
+
         $users = User::query()
             ->where('id', '!=', auth()->id())
             ->get();
