@@ -27,7 +27,7 @@ class MessageResource extends JsonResource
             'reply' => $this->whenLoaded('reply', function () {
                 return new MessageResource($this->reply);
             }),
-            'message' => $this->message_deleted_at? 'This message has been deleted' : $this->message,
+            'message' => $this->message_deleted_at ? 'This message was deleted' : $this->message,
             'seen_at' => $this->seen_at?->format('Y-m-d H:i:s'),
             'message_deleted_at' => $this->message_deleted_at?->format('Y-m-d H:i:s'),
             'sent_at' => $this->created_at?->format('H:i'),

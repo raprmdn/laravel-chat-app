@@ -69,4 +69,17 @@ class ChatController extends Controller
 
         return redirect()->back();
     }
+
+    public function destroy(Chat $chat)
+    {
+        if ($chat->sender_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $chat->update([
+            'message_deleted_at' => now(),
+        ]);
+
+        return redirect()->back();
+    }
 }
