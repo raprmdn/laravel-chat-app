@@ -53,7 +53,7 @@ export default function Show() {
                         <div className="flex-col hidden w-full px-5 py-2 pb-5 lg:flex lg:w-1/3 lg:border-r lg:border-gray-700">
                             <MineProfileChat auth={auth} />
                             <SearchChatBar />
-                            <ChatListUser />
+                            <ChatListUser setReply={setReply} />
                         </div>
 
                         <div className="flex flex-col w-full lg:w-2/3">

@@ -1,18 +1,28 @@
 import React from 'react';
-import { Link, usePage } from "@inertiajs/react";
+import { Link, router, usePage } from "@inertiajs/react";
 import ProfilePictureOnChat from "@/Components/ProfilePictureOnChat.jsx";
 import clsx from "clsx";
 
-export default function ChatListUser() {
+export default function ChatListUser({ setReply }) {
     const { chat_with: chatWithUser } = usePage().props;
     const { data: users } = usePage().props.users;
+
+    const visitUser = (user) => {
+        router.visit(route('chat.show', user.uuid), {
+            preserveScroll: true,
+            preserveState: true,
+            onSuccess: () => {
+                setReply(null)
+            }
+        });
+    }
 
     return (
         <>
             <div className="flex-1 mt-3 overflow-y-auto" scroll-region="true">
                 {
                     users.map((user) => (
-                        <Link href={route('chat.show', user.uuid)} key={user.uuid} preserveScroll preserveState
+                        <button key={user.uuid} onClick={() => visitUser(user)}
                             className={clsx(user.id === chatWithUser?.id ? 'bg-gray-800' : 'bg-transparent', 'flex w-full items-center hover:bg-gray-800/60 px-2.5 py-3 rounded-md')}>
                             <div className="items-center mr-3 flex-2">
                                 <ProfilePictureOnChat user={user} />
@@ -35,7 +45,7 @@ export default function ChatListUser() {
                                     </div>
                                 </div>
                             </div>
-                        </Link>
+                        </button>
                     ))
                 }
             </div>
