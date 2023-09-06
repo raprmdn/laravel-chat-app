@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { Fragment, useEffect, useRef } from 'react';
 import App from "@/Layouts/App.jsx";
 import { Head, usePage } from "@inertiajs/react";
 import MineProfileChat from "@/Components/MineProfileChat.jsx";
@@ -11,10 +11,32 @@ import LeftSideBoxChat from "@/Components/LeftSideBoxChat.jsx";
 import RightSideBoxChat from "@/Components/RightSideBoxChat.jsx";
 
 export default function Show() {
-    const { auth, user } = usePage().props;
+    const { auth, chat_with: chatWithUser, messages } = usePage().props;
     const scrollRef = useRef(null)
 
-    scrollRef.current?.scrollTo(0, 999999999)
+    useEffect(() => {
+        scrollRef.current?.scrollTo(0, scrollRef.current?.scrollHeight)
+    }, [messages])
+
+    const renderMessage = (messages, auth) => {
+        return messages.map((date) => (
+            <Fragment key={date.date}>
+                <DateChatIndicator date={date.date} />
+                {date.messages.map((message, idx) => {
+                    const isFirstMessage = idx === 0 || message.sender_id !== date.messages[idx - 1].sender_id;
+                    return <Fragment key={message.id}>
+                    {
+                        message.sender_id === auth.user.id ? (
+                            <RightSideBoxChat message={message} isFirstMessage={isFirstMessage}/>
+                        ) : (
+                            <LeftSideBoxChat message={message} isFirstMessage={isFirstMessage}/>
+                        )
+                    }
+                    </Fragment>
+                })}
+            </Fragment>
+        ))
+    }
 
     return (
         <>
@@ -30,10 +52,9 @@ export default function Show() {
                         </div>
 
                         <div className="flex flex-col w-full lg:w-2/3">
-                            {/* Header Chat User */}
                             <div className="px-6 py-5 border-b border-gray-700">
                                 <div className="flex items-center justify-between">
-                                    <HeaderUserChatBox user={user} />
+                                    <HeaderUserChatBox user={chatWithUser} />
                                     <div className="pr-5">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-3.5 h-3.5 lg:w-5 lg:h-5 text-white">
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/>
@@ -44,15 +65,7 @@ export default function Show() {
 
                             <div className="flex-1 h-screen px-2 pb-5 overflow-y-scroll lg:px-8" ref={scrollRef}>
                                 <div className="grid grid-cols-12">
-                                    <DateChatIndicator />
-                                    <LeftSideBoxChat />
-                                    <LeftSideBoxChat />
-                                    <LeftSideBoxChat />
-                                    <RightSideBoxChat />
-                                    <DateChatIndicator />
-                                    <RightSideBoxChat />
-                                    <LeftSideBoxChat />
-                                    <LeftSideBoxChat />
+                                    { renderMessage(messages, auth) }
                                 </div>
                             </div>
 

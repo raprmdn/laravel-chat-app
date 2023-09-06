@@ -4,7 +4,7 @@ import ProfilePictureOnChat from "@/Components/ProfilePictureOnChat.jsx";
 import clsx from "clsx";
 
 export default function ChatListUser() {
-    const { user: currentUser } = usePage().props;
+    const { chat_with: chatWithUser } = usePage().props;
     const { data: users } = usePage().props.users;
 
     return (
@@ -13,7 +13,7 @@ export default function ChatListUser() {
                 {
                     users.map((user) => (
                         <Link href={route('chat.show', user.uuid)} key={user.uuid} preserveScroll preserveState
-                            className={clsx(user.id === currentUser?.id ? 'bg-gray-800' : 'bg-transparent', 'flex w-full items-center hover:bg-gray-800/60 px-2.5 py-3 rounded-md')}>
+                            className={clsx(user.id === chatWithUser?.id ? 'bg-gray-800' : 'bg-transparent', 'flex w-full items-center hover:bg-gray-800/60 px-2.5 py-3 rounded-md')}>
                             <div className="items-center mr-3 flex-2">
                                 <ProfilePictureOnChat user={user} />
                             </div>

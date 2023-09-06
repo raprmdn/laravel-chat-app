@@ -47,8 +47,8 @@ class User extends Authenticatable
         'last_seen_at' => 'datetime',
     ];
 
-    public function chats(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function messages(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(Chat::class);
+        return $this->hasMany(Chat::class, 'sender_id');
     }
 }
