@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm, usePage } from "@inertiajs/react";
 
-export default function ChatInputMessage() {
+export default function ChatInputMessage(props) {
     const { chat_with: chatWithUser } = usePage().props;
     const { data, setData, reset, post } = useForm({
         message: '',
-        reply_id: '',
+        reply_id: props.reply?.id,
     });
+
+    useEffect(() => {
+        setData('reply_id', props.reply?.id);
+    }, [props.reply])
 
     const handleInputChange = (e) => {
         setData('message', e.target.value);
@@ -27,6 +31,7 @@ export default function ChatInputMessage() {
             onSuccess: () => {
                 reset();
                 e.target.style.height = 'auto';
+                props.setReply(null);
             },
             preserveScroll: true,
         });

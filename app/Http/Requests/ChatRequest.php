@@ -23,7 +23,7 @@ class ChatRequest extends FormRequest
     {
         return [
             'message' => ['required', 'string'],
-            'reply_id' => ['nullable', 'integer', 'exists:messages,id'],
+            'reply_id' => ['nullable', 'integer', 'exists:chats,id'],
         ];
     }
 }

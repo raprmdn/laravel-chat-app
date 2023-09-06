@@ -36,7 +36,7 @@ class ChatController extends Controller
         $messages = Chat::query()
             ->where(fn($query) => $query->where('sender_id', auth()->id())->where('receiver_id', $user->id))
             ->orWhere(fn($query) => $query->where('sender_id', $user->id)->where('receiver_id', auth()->id()))
-            ->with('reply')
+            ->with(['receiver', 'sender', 'reply' => fn($query) => $query->with('sender')])
             ->orderBy('created_at')
             ->get()
             ->groupBy(function ($message) {

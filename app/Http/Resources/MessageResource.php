@@ -17,7 +17,13 @@ class MessageResource extends JsonResource
         return [
             'id' => $this->id,
             'sender_id' => $this->sender_id,
+            'sender_name' => $this->whenLoaded('sender', function () {
+                return $this->sender->name;
+            }),
             'receiver_id' => $this->receiver_id,
+            'receiver_name' => $this->whenLoaded('receiver', function () {
+                return $this->receiver->name;
+            }),
             'reply' => $this->whenLoaded('reply', function () {
                 return new MessageResource($this->reply);
             }),
