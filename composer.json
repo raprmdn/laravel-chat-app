@@ -12,6 +12,7 @@
         "laravel/sanctum": "^3.2",
         "laravel/scout": "^10.3",
         "laravel/tinker": "^2.8",
+        "pusher/pusher-php-server": "^7.2",
         "tightenco/ziggy": "^1.0"
     },
     "require-dev": {
