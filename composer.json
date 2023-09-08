@@ -10,10 +10,12 @@
         "inertiajs/inertia-laravel": "^0.6.3",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.2",
+        "laravel/scout": "^10.3",
         "laravel/tinker": "^2.8",
         "tightenco/ziggy": "^1.0"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.9",
         "fakerphp/faker": "^1.9.1",
         "laravel/breeze": "^1.23",
         "laravel/pint": "^1.0",
