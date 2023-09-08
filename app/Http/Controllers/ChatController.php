@@ -13,12 +13,8 @@ class ChatController extends Controller
 {
     public function index()
     {
-        $users = User::query()
-            ->where('id', '!=', auth()->id())
-            ->get();
-
         return inertia('Chat/Index', [
-            'users' => UserCollection::make($users),
+            'users' => UserCollection::make($this->getChatWithUser()),
         ]);
     }
 
@@ -28,34 +24,12 @@ class ChatController extends Controller
             return redirect()->route('chat.index');
         }
 
-        $users = User::query()
-            ->where('id', '!=', auth()->id())
-            ->get();
         UserResource::withoutWrapping();
 
-        $messages = Chat::query()
-            ->where(fn($query) => $query->where('sender_id', auth()->id())->where('receiver_id', $user->id))
-            ->orWhere(fn($query) => $query->where('sender_id', $user->id)->where('receiver_id', auth()->id()))
-            ->with(['receiver', 'sender', 'reply' => fn($query) => $query->with('sender')])
-            ->orderBy('created_at')
-            ->get()
-            ->groupBy(function ($message) {
-                return $message->created_at->isToday() ? 'Today' : ($message->created_at->isYesterday() ? 'Yesterday' :
-                    $message->created_at->format('F j, Y'));
-            })
-            ->map(function ($messages, $date) {
-                return [
-                    'date' => $date,
-                    'messages' => MessageResource::collection($messages),
-                ];
-            })
-            ->values()
-            ->toArray();
-
         return inertia('Chat/Show', [
-            'users' => UserCollection::make($users),
+            'users' => UserCollection::make($this->getChatWithUser()),
             'chat_with' => UserResource::make($user),
-            'messages' => $messages
+            'messages' => $this->loadMessages($user)
         ]);
     }
 
@@ -81,5 +55,66 @@ class ChatController extends Controller
         ]);
 
         return redirect()->back();
+    }
+
+    private function getChatWithUser()
+    {
+        return User::query()
+            ->whereHas('receiveMessages', function ($query) {
+                $query->where('sender_id', auth()->id());
+            })
+            ->orWhereHas('sendMessages', function ($query) {
+                $query->where('receiver_id', auth()->id());
+            })
+            ->withCount(['messages' => fn($query) => $query->where('receiver_id', auth()->id())->whereNull('seen_at')])
+            ->with([
+                'sendMessages' => function ($query) {
+                    $query->whereIn('id', function ($query) {
+                        $query->selectRaw('max(id)')
+                            ->from('chats')
+                            ->where('receiver_id', auth()->id())
+                            ->groupBy('sender_id');
+                    });
+                },
+                'receiveMessages' => function ($query) {
+                    $query->whereIn('id', function ($query) {
+                        $query->selectRaw('max(id)')
+                            ->from('chats')
+                            ->where('sender_id', auth()->id())
+                            ->groupBy('receiver_id');
+                    });
+                },
+            ])
+            ->orderByDesc(function ($query) {
+                $query->select('created_at')
+                    ->from('chats')
+                    ->whereColumn('sender_id', 'users.id')
+                    ->orWhereColumn('receiver_id', 'users.id')
+                    ->orderByDesc('created_at')
+                    ->limit(1);
+            })
+            ->get();
+    }
+
+    private function loadMessages($user)
+    {
+        return Chat::query()
+            ->where(fn($query) => $query->where('sender_id', auth()->id())->where('receiver_id', $user->id))
+            ->orWhere(fn($query) => $query->where('sender_id', $user->id)->where('receiver_id', auth()->id()))
+            ->with(['receiver', 'sender', 'reply' => fn($query) => $query->with('sender')])
+            ->orderBy('created_at')
+            ->get()
+            ->groupBy(function ($message) {
+                return $message->created_at->isToday() ? 'Today' : ($message->created_at->isYesterday() ? 'Yesterday' :
+                    $message->created_at->format('F j, Y'));
+            })
+            ->map(function ($messages, $date) {
+                return [
+                    'date' => $date,
+                    'messages' => MessageResource::collection($messages),
+                ];
+            })
+            ->values()
+            ->toArray();
     }
 }
