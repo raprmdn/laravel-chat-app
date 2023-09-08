@@ -26,6 +26,9 @@ class ChatController extends Controller
 
         UserResource::withoutWrapping();
 
+        $chats = $user->messages()->where('receiver_id', auth()->id())->whereNull('seen_at')->get();
+        $chats->each->update(['seen_at' => now()]);
+
         return inertia('Chat/Show', [
             'users' => UserCollection::make($this->getChatWithUser()),
             'chat_with' => UserResource::make($user),
