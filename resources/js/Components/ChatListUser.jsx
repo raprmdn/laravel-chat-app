@@ -30,8 +30,6 @@ export default function ChatListUser({ setReply }) {
                         else if (receiveMessage) chat = receiveMessage;
                         else if (sendMessage) chat = sendMessage;
 
-                        console.log(chat?.message_deleted_at);
-
                         return <button key={user.uuid} onClick={() => visitUser(user)}
                                 className={clsx(user.id === chatWithUser?.id ? 'bg-gray-800' : 'bg-transparent', 'flex w-full items-center hover:bg-gray-800/60 px-2.5 py-3 rounded-md')}>
                             <div className="items-center mr-3 flex-2">

@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useRef, useState } from 'react';
 import App from "@/Layouts/App.jsx";
-import { Head, usePage } from "@inertiajs/react";
+import { Head, router, usePage } from "@inertiajs/react";
 import MineProfileChat from "@/Components/MineProfileChat.jsx";
 import SearchChatBar from "@/Components/SearchChatBar.jsx";
 import ChatListUser from "@/Components/ChatListUser.jsx";
@@ -9,6 +9,7 @@ import ChatInputMessage from "@/Components/ChatInputMessage.jsx";
 import DateChatIndicator from "@/Components/DateChatIndicator.jsx";
 import LeftSideBoxChat from "@/Components/LeftSideBoxChat.jsx";
 import RightSideBoxChat from "@/Components/RightSideBoxChat.jsx";
+import { debounce } from 'lodash';
 
 export default function Show() {
     const { auth, chat_with: chatWithUser, messages } = usePage().props;
@@ -22,6 +23,32 @@ export default function Show() {
     useEffect(() => {
         scrollRef.current?.scrollTo(0, scrollRef.current?.scrollHeight)
     }, [messages, reply])
+
+
+    useEffect(() => {
+        const debouncedReload = debounce(() => {
+            router.reload({
+                preserveScroll: true,
+                only: ['messages', 'users'],
+            });
+        }, 350);
+
+        const handleReloadReadMessage = () => {
+            debouncedReload();
+        };
+
+        Echo.private('message.' + auth.user.uuid)
+            .listen('ReadMessageEvent', handleReloadReadMessage)
+            .listen('NewMessageEvent', () => {
+                debouncedReload();
+            });
+
+        return () => {
+            Echo.private('message.' + auth.user.uuid)
+                .stopListening('ReadMessageEvent', handleReloadReadMessage)
+                .stopListening('NewMessageEvent');
+        };
+    }, []);
 
     const renderMessage = (messages, auth) => {
         return messages.map((date) => (

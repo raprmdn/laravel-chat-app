@@ -1,5 +1,5 @@
 import React from 'react';
-import { Head, usePage } from "@inertiajs/react";
+import { Head, router, usePage } from "@inertiajs/react";
 import App from "@/Layouts/App.jsx";
 import MineProfileChat from "@/Components/MineProfileChat.jsx";
 import SearchChatBar from "@/Components/SearchChatBar.jsx";
@@ -7,6 +7,20 @@ import ChatListUser from "@/Components/ChatListUser.jsx";
 
 export default function Index() {
     const { auth } = usePage().props;
+
+    Echo.private('message.' + auth.user.uuid)
+        .listen('ReadMessageEvent', () => {
+            router.reload({
+                preserveScroll: true,
+                preserveState: true,
+            })
+        })
+        .listen('NewMessageEvent', () => {
+            router.reload({
+                preserveScroll: true,
+                preserveState: true,
+            })
+        });
 
     return (
         <>
@@ -22,8 +36,8 @@ export default function Index() {
                         </div>
 
                         <div className="flex-col hidden lg:flex lg:w-2/3">
-                            <div className="flex justify-center items-center h-screen">
-                               <div className="text-gray-300 tracking-tight font-semibold">
+                            <div className="flex items-center justify-center h-screen">
+                               <div className="font-semibold tracking-tight text-gray-300">
                                    Search and select someone to start chatting with
                                </div>
                             </div>

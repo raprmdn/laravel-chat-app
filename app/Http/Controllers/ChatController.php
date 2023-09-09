@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewMessageEvent;
+use App\Events\ReadMessageEvent;
 use App\Http\Requests\ChatRequest;
 use App\Http\Resources\MessageResource;
 use App\Http\Resources\UserCollection;
@@ -27,22 +29,28 @@ class ChatController extends Controller
         UserResource::withoutWrapping();
 
         $chats = $user->messages()->where('receiver_id', auth()->id())->whereNull('seen_at')->get();
-        $chats->each->update(['seen_at' => now()]);
+        $result = $chats->each->update(['seen_at' => now()]);
+        if ($result->count()) {
+            $message = $result->last()->load('sender');
+            broadcast(new ReadMessageEvent($message))->toOthers();
+        }
 
         return inertia('Chat/Show', [
             'users' => UserCollection::make($this->getChatWithUser()),
             'chat_with' => UserResource::make($user),
-            'messages' => $this->loadMessages($user)
+            'messages' => $this->loadMessages($user),
         ]);
     }
 
     public function chat(User $user, ChatRequest $request)
     {
-         \Auth::user()->messages()->create([
-             'receiver_id' => $user->id,
-             'message' => $request->message,
-             'reply_id' => $request->reply_id,
-         ]);
+        $message = \Auth::user()->messages()->create([
+            'receiver_id' => $user->id,
+            'message' => $request->message,
+            'reply_id' => $request->reply_id,
+        ]);
+
+        broadcast(new NewMessageEvent($message->load('receiver')))->toOthers();
 
         return redirect()->back();
     }
@@ -53,9 +61,11 @@ class ChatController extends Controller
             abort(403);
         }
 
-        $chat->update([
+        $message = tap($chat)->update([
             'message_deleted_at' => now(),
         ]);
+
+        broadcast(new NewMessageEvent($message->load('receiver')))->toOthers();
 
         return redirect()->back();
     }
