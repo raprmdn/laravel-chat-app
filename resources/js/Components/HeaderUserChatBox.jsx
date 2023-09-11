@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from "@inertiajs/react";
 
-export default function HeaderUserChatBox({ user, isOnline }) {
+export default function HeaderUserChatBox({ user, isOnline, isTyping }) {
     return (
         <>
             <div className="flex items-center">
@@ -22,7 +22,11 @@ export default function HeaderUserChatBox({ user, isOnline }) {
                         {user.name}
                     </div>
                     <div className="text-gray-400 text-[10px] lg:text-xs truncate mt-0.5 tracking-tight">
-                        {isOnline ? 'Online' : `${user.last_seen_at}`}
+                        {
+                            isTyping ? `${user.name} is typing...` : (
+                                isOnline ? 'Online' : `${user.last_seen_at}`
+                            )
+                        }
                     </div>
                 </div>
             </div>

@@ -16,6 +16,7 @@ export default function Show() {
     const scrollRef = useRef(null)
     const [reply, setReply] = useState(null)
     const [onlineUsers, setOnlineUsers] = useState([])
+    const [isTyping, setIsTyping] = useState(false)
 
     useEffect(() => {
         Echo.join('online-users')
@@ -47,14 +48,19 @@ export default function Show() {
             });
         }, 350);
 
-        const handleReloadReadMessage = () => {
-            debouncedReload();
-        };
-
         Echo.private('message.' + auth.user.uuid)
-            .listen('ReadMessageEvent', handleReloadReadMessage)
+            .listen('ReadMessageEvent', () => {
+                debouncedReload();
+            })
             .listen('NewMessageEvent', () => {
                 debouncedReload();
+            })
+            .listenForWhisper('typing', () => {
+                setIsTyping(true);
+
+                setTimeout(() => {
+                    setIsTyping(false);
+                }, 2000)
             });
 
         return () => {
@@ -100,7 +106,11 @@ export default function Show() {
                         <div className="flex flex-col w-full lg:w-2/3">
                             <div className="px-6 py-5 border-b border-gray-700">
                                 <div className="flex items-center justify-between">
-                                    <HeaderUserChatBox user={chatWithUser} isOnline={onlineUsers?.find((onlineUser) => onlineUser.id === chatWithUser.id)} />
+                                    <HeaderUserChatBox
+                                        user={chatWithUser}
+                                        isOnline={onlineUsers?.find((onlineUser) => onlineUser.id === chatWithUser.id)}
+                                        isTyping={isTyping}
+                                    />
                                     <div className="pr-5">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-3.5 h-3.5 lg:w-5 lg:h-5 text-white">
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/>
@@ -138,7 +148,11 @@ export default function Show() {
                             </div>
 
                             <div className="flex px-6 py-1.5 border-t border-gray-700 z-50">
-                                <ChatInputMessage reply={reply} setReply={setReply} />
+                                <ChatInputMessage
+                                    reply={reply}
+                                    setReply={setReply}
+                                    setIsTyping={setIsTyping}
+                                />
                             </div>
                         </div>
                     </div>

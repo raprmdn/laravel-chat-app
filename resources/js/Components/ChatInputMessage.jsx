@@ -34,9 +34,19 @@ export default function ChatInputMessage(props) {
                 reset();
                 e.target.style.height = 'auto';
                 props.setReply(null);
+                props.setIsTyping(false);
             },
             preserveScroll: true,
         });
+    }
+
+    const onTyping = () => {
+        setTimeout(() => {
+            Echo.private(`message.${chatWithUser.uuid}`)
+                .whisper('typing', {
+                    name: chatWithUser.name
+                })
+        }, 300)
     }
 
     return (
@@ -52,6 +62,7 @@ export default function ChatInputMessage(props) {
                     rows={1}
                     onChange={handleInputChange}
                     onKeyDown={customKeyEvent}
+                    onKeyUp={onTyping}
                     style={{ maxHeight: '100px', resize: 'none', overflowY: data.message ? 'auto' : 'hidden' }}
                 />
 
