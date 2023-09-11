@@ -9,7 +9,7 @@ export default function ProfilePictureOnChat({ user }) {
                         {user.name.charAt(0).toUpperCase()}
                     </span>
                 </span>
-                <span className="absolute bottom-0 right-0.5 block h-2 w-2 rounded-full ring-2 ring-gray-200 bg-green-500"/>
+                {/*<span className="absolute bottom-0 right-0.5 block h-2 w-2 rounded-full ring-2 ring-gray-200 bg-green-500"/>*/}
             </div>
         </>
     )

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Helpers\Helper;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -20,7 +21,7 @@ class UserResource extends JsonResource
             'username' => $this->username,
             'name' => $this->name,
             'email' => $this->email,
-            'last_seen_at' => $this->last_seen_at?->format('Y-m-d H:i:s'),
+            'last_seen_at' => Helper::userLastActivityStatus($this->last_seen_at),
             'messages' => MessageResource::collection($this->whenLoaded('messages')),
             'messages_count' => $this->whenCounted('messages', $this->messages_count),
             'receive_messages' => MessageResource::collection($this->whenLoaded('receiveMessages')),

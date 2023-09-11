@@ -15,6 +15,20 @@ export default function Show() {
     const { auth, chat_with: chatWithUser, messages } = usePage().props;
     const scrollRef = useRef(null)
     const [reply, setReply] = useState(null)
+    const [onlineUsers, setOnlineUsers] = useState([])
+
+    useEffect(() => {
+        Echo.join('online-users')
+            .here((users) => {
+                setOnlineUsers(users);
+            })
+            .joining((user) => {
+                setOnlineUsers((prev) => [...prev, user]);
+            })
+            .leaving((user) => {
+                setOnlineUsers((prev) => prev.filter((u) => u.id !== user.id));
+            });
+    }, []);
 
     const replyHandleState = (message) => {
         setReply(message)
@@ -86,7 +100,7 @@ export default function Show() {
                         <div className="flex flex-col w-full lg:w-2/3">
                             <div className="px-6 py-5 border-b border-gray-700">
                                 <div className="flex items-center justify-between">
-                                    <HeaderUserChatBox user={chatWithUser} />
+                                    <HeaderUserChatBox user={chatWithUser} isOnline={onlineUsers?.find((onlineUser) => onlineUser.id === chatWithUser.id)} />
                                     <div className="pr-5">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-3.5 h-3.5 lg:w-5 lg:h-5 text-white">
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/>
