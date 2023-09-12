@@ -106,7 +106,15 @@ export default function SearchChatBar() {
                                                     {({active}) => (
                                                         <>
                                                             <UserCircleIcon className={clsx('h-6 w-6 flex-none text-gray-900 text-opacity-40', active && 'text-opacity-100')} aria-hidden="true"/>
-                                                            <Link href={route('chat.show', user.uuid)} className="flex-auto ml-3 truncate">{user.name}</Link>
+                                                            <Link onClick={() => {
+                                                                setQuery('')
+                                                                setUsers([])
+                                                                setOpen(false)
+                                                            }}
+                                                                  href={route('chat.show', user.uuid)}
+                                                                  className="flex-auto ml-3 truncate">
+                                                                {user.name}
+                                                            </Link>
                                                         </>
                                                     )}
                                                 </Combobox.Option>

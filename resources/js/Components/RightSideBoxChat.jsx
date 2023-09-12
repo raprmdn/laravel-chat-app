@@ -21,10 +21,10 @@ export default function RightSideBoxChat({ message, isFirstMessage, replyHandleS
                                     </div>
                                     {!message.reply.message_deleted_at ? (
                                         <div className="overflow-hidden text-gray-300/80" style={{ display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
-                                            <div className="whitespace-pre-wrap">{message.reply.message}</div>
+                                            <div className="break-all whitespace-pre-wrap">{message.reply.message}</div>
                                         </div>
                                     ) : (
-                                        <div className="flex justify-center items-center text-center text-xs text-gray-400/60 italic mr-1 select-none">{message.reply.message}</div>
+                                        <div className="flex items-center justify-center mr-1 text-xs italic text-center select-none text-gray-400/60">{message.reply.message}</div>
                                     )}
                                 </div>
                             </div>
@@ -32,8 +32,8 @@ export default function RightSideBoxChat({ message, isFirstMessage, replyHandleS
 
                         {/* Chat Body */}
                         {!message.message_deleted_at ?
-                            (<div className="whitespace-pre-wrap">{message.message}</div>)
-                            : (<div className="flex justify-center items-center text-center text-xs text-gray-400/60 italic mr-1 select-none">{message.message}</div>)
+                            (<div className="break-all whitespace-pre-wrap">{message.message}</div>)
+                            : (<div className="flex items-center justify-center mr-1 text-xs italic text-center select-none text-gray-400/60">{message.message}</div>)
                         }
 
                         {/* Chat Timestamp */}
