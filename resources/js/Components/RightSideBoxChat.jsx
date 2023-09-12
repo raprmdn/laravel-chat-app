@@ -24,7 +24,7 @@ export default function RightSideBoxChat({ message, isFirstMessage, replyHandleS
                                             <div className="break-all whitespace-pre-wrap">{message.reply.message}</div>
                                         </div>
                                     ) : (
-                                        <div className="flex items-center justify-center mr-1 text-xs italic text-center select-none text-gray-400/60">{message.reply.message}</div>
+                                        <div className="flex items-center mr-1 text-xs italic text-center select-none text-gray-400/60">{message.reply.message}</div>
                                     )}
                                 </div>
                             </div>
